@@ -23,4 +23,8 @@ pastes.py --language c++ --tag myCurrentCPlusPlusProject "#include <iostream> in
                     ```
                     The client will return the link to the pastes as well as the delete URL
                     
-       
+
+Example:
+```
+python3 ./pastes.py MyResume.docx -n "My Resume 2022" -t job-search
+```
