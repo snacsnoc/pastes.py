@@ -13,14 +13,13 @@ optional arguments:
   -t TAG, --tag TAG     Tag description of paste
   -l --language {bash,c++,c#,css,diff,java,javascript,perl,php,plain,python,ruby,sql,xml}    Programming language
 
-
-                    ```
-                    Example:
-                    ```
+```
+Example:
+ ```
 pastes.py -l php -n "Pasteros API controller" controllers/Api_Controller.php
 
 pastes.py --language c++ --tag myCurrentCPlusPlusProject "#include <iostream> int main(){std::cout << 1 << std::endl;}"
-                    ```
-                    The client will return the link to the pastes as well as the delete URL
+```
+The client will return the link to the pastes as well as the delete URL
                     
        
