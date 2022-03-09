@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
-#Pasteros Paste at pasteros.io
+#Pasteros Paste at pasteros.io (now paste.geekness.eu)
 
 # Copyright (C) 2015
 # 
@@ -23,19 +23,20 @@
 
 """This is a script to use the Pasteros.io api"""
 
-import urllib2
-import sys
-import stat
+#from urllib.request import urlopen
+ 
 import os
 import fileinput
 import sqlite3
 import json
 import argparse
+import sys
+import stat
+import requests
 
-def tell_flake_to_shutup():
-    sqlite3
-    sys
-    urllib2
+
+
+
 
 class Upload:
     def __init__(self, name = None, content = None, language = None, tag = None,
@@ -50,7 +51,7 @@ class Upload:
         self.file_      = file_
 
         # API Values
-        self.site       = "https://pasteros.io/"
+        self.site       = "http://paste.geekness.eu/"
         self.api        = "api/v1/create"
         self.uri        = self.site + self.api
         self.data       = None
@@ -61,15 +62,12 @@ class Upload:
         # Check to see if we're uploading a file
         # And then read it.
         if self.file_:
-            #print "file exits!!!!"
             self.create_content()
 
     def create_content(self):
-        print "Creating Content from file"
+        print("Creating Content from file")
         with open(self.file_) as f:
             file_contents = "".join(f.readlines())
-            #print "".join(file_contents)
-            #print file_contents
             self.content = file_contents
 
     def create_json(self):
@@ -89,18 +87,22 @@ class Upload:
     
     def upload(self):
         # Gotta pass in self.data to the API values
-        r = urllib2.Request(url=self.uri, data=self.data)
-        r = urllib2.urlopen(r)
-        r =  r.read()
+        #with urlopen(url=self.uri, data=self.data) as response:
+        #    r = response.read()
+        #    self.response = json.loads(r)
+        #r = urllib.request.urlopen()
+        #r = urllib.urlopen(r)
+        #r =  r.read()
+        response = requests.post(url=self.uri, data=self.data)
+        #return response
+        #r = response.read()
+        self.response = json.loads(response.text)
         #print r
-        self.response = json.loads(r)
+        
 
     def read_response(self):
-        # Test response
-        #self.response = { 'id' : 25235, 'delete_id' : 1235235}
-        print self.site + str(self.response['id'])
-        print (self.site + str(self.response['id']) +
-        "/delete/" + str(self.response['delete_id']))
+        print (self.site + str(self.response['id']))
+        print (self.site + str(self.response['id']) +       "/delete/" + str(self.response['delete_id']))
 
     def __str__(self):
         tmpls = []
@@ -124,8 +126,8 @@ def parse_flag():
     parser.add_argument('file', nargs='+',  help="Put either a file, or raw"
     "text")
     parser.add_argument('-n', '--name',     help="Name of the paste")
-    parser.add_argument('-t', '--tag',      help="Tag description of paste")
-    parser.add_argument('-l', '--language', help="Programming language",
+    parser.add_argument('-t', '--tag',      help="Tag of the. Tags are used to group pastes.")
+    parser.add_argument('-l', '--language', help="Programming language for syntax highlighting",
             choices=languages)
     #parser.add_argument('-c', '--content',  help="What you are pasting")
     args = parser.parse_args()
@@ -142,7 +144,7 @@ def parse_flag():
             content_or_file: content}
 
 if __name__ == '__main__':
-    print "running..."
+    print ("Running...")
     mode = os.fstat(0).st_mode
 
     # This is to check if data is being piped in,
@@ -152,8 +154,8 @@ if __name__ == '__main__':
         txt = []
         for line in fileinput.input():
             txt.append(line.strip(''))
-        print " ".join(txt)
-        #print fileinput.filename()
+        print (" ".join(txt))
+        print (fileinput.filename())
 
         text = " ".join(txt)
         
